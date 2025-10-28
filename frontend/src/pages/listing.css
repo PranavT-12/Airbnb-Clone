@@ -1,0 +1,18 @@
+.card-img-top {
+  height: 200px;       /* sab image ek height ki */
+  width: 100%;         /* full width */
+  object-fit: cover;
+  cursor: pointer;  
+}
+
+.card-body {
+  min-height: 120px;   /* adjust as per design */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.container h2 {
+  cursor: pointer;
+}
