@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -13,33 +11,35 @@ export default function Login() {
   });
   const [alertMsg, setAlertMsg] = useState(null);
 
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post("http://localhost:5000/api/auth/login", formData);
+    e.preventDefault();
+    try {
+      // ✅ Use environment variable for backend URL
+      const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
-    // ✅ Set token
-    localStorage.setItem("token", "dummyToken");
+      const res = await axios.post(`${BASE_URL}/api/auth/login`, formData);
 
-    // ✅ Notify Navbar about token change
-    window.dispatchEvent(new Event("tokenChange"));
+      // ✅ Set token
+      localStorage.setItem("token", "dummyToken");
 
-    setAlertMsg("✅ Login successful!");
+      // ✅ Notify Navbar about token change
+      window.dispatchEvent(new Event("tokenChange"));
 
-    // ✅ Navigate without reload
-    setTimeout(() => {
-      navigate("/listings");
-    }, 1200);
-  } catch (err) {
-    console.error(err.response?.data || err);
-    alert(err.response?.data?.message || "❌ Login failed.");
-  }
-};
+      setAlertMsg("✅ Login successful!");
+
+      // ✅ Navigate without reload
+      setTimeout(() => {
+        navigate("/listings");
+      }, 1200);
+    } catch (err) {
+      console.error(err.response?.data || err);
+      alert(err.response?.data?.message || "❌ Login failed.");
+    }
+  };
 
   return (
     <>
