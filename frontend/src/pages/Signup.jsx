@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +13,9 @@ export default function Signup() {
 
   const [alertMsg, setAlertMsg] = useState(null);
 
+  // ✅ Backend URL from .env
+  const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -22,16 +23,17 @@ export default function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/signup", formData);
+      await axios.post(`${BASE_URL}/api/auth/signup`, formData);
+
       localStorage.setItem("token", "dummyToken");
       setAlertMsg("✅ Signup successful!");
+
       setTimeout(() => {
         navigate("/login");
-        window.location.reload();
       }, 1200);
     } catch (err) {
-      console.error(err);
-      alert("❌ Signup failed. Try again.");
+      console.error(err.response?.data || err);
+      alert(err.response?.data?.message || "❌ Signup failed. Try again.");
     }
   };
 
